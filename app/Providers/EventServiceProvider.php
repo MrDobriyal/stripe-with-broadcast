@@ -15,15 +15,19 @@ class EventServiceProvider extends ServiceProvider
     {
         
     }
-
+ protected $listen = [
+        MessageSent::class => [
+            CreateNotification::class,
+        ],
+    ];
     /**
      * Bootstrap services.
      */
     public function boot(): void
     {
-          Event::listen(
-        MessageSent::class,
-        CreateNotification::class
-    );
+    //       Event::listen(
+    //     MessageSent::class,
+    //     CreateNotification::class
+    // );
     }
 }

@@ -3,7 +3,11 @@
 
 <head>
     <title>@yield('title', 'Frontend')</title>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
+    <!-- vite important for echo and other to work -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    @vite(['resources/js/app.js'])
     @yield('styles')
 </head>
 

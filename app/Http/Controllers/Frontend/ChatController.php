@@ -9,10 +9,25 @@ use App\Events\MessageSent;
 
 class ChatController extends Controller
 {       
-    public function index(Request $request){
-        $messages = Message::orderBy("created_at","desc")->paginate(10);
-        return view("frontend.chat.index", compact("messages"));
-    }
+    // public function index(Request $request){
+        
+    //     $messages = Message::orderBy("created_at","desc")->paginate(10);
+    //     return view("frontend.chat.index", compact("messages"));
+    // }
+    public function chat($userId)
+{
+    $receiverId = $userId;
+
+    $messages = Message::where(function ($q) use ($receiverId) {
+        $q->where('sender_id', auth()->id())
+          ->where('receiver_id', $receiverId);
+    })->orWhere(function ($q) use ($receiverId) {
+        $q->where('sender_id', $receiverId)
+          ->where('receiver_id', auth()->id());
+    })->orderBy('created_at')->get();
+
+    return view('frontend.chat.index', compact('messages', 'receiverId'));
+}
     public function send(Request $request)
 {
     $sender = auth()->user();
@@ -32,10 +47,10 @@ class ChatController extends Controller
     // 2. Fire event (REAL-TIME)
     broadcast(new MessageSent($message))->toOthers();
 
-    // return response()->json([
-    //     'status' => true,
-    //     'message' => 'Message sent'
-    // ]);
+    return response()->json([
+        'status' => true,
+        'message' => 'Message sent'
+    ]);
 }
 
 }

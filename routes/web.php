@@ -49,4 +49,4 @@ Route::post(
 );
 
 Route::post('/send-message', action: [ChatController::class, 'send'])->name('frontend.message.send');
-Route::get('/chat',[ChatController::class,'index'])->name('frontend.chat.index');
+Route::get('/chat/{recieverId}',[ChatController::class,'chat'])->name('frontend.chat.index');
